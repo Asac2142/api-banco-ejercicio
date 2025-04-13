@@ -35,7 +35,11 @@ public class Movimiento {
     public Movimiento() {
     }
 
-    public Movimiento(LocalDate fecha, TipoMovimiento tipoMovimiento, BigDecimal valor, BigDecimal saldo,
+    public Movimiento(
+            LocalDate fecha,
+            TipoMovimiento tipoMovimiento,
+            BigDecimal valor,
+            BigDecimal saldo,
             Cuenta cuenta) {
         this.fecha = fecha;
         this.tipoMovimiento = tipoMovimiento;
@@ -44,7 +48,6 @@ public class Movimiento {
         this.cuenta = cuenta;
     }
 
-    // Getters and setters
     public Long getId() {
         return id;
     }
