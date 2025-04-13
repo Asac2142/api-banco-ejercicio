@@ -3,17 +3,13 @@ package banco.pichincha.web.cliente;
 import banco.pichincha.web.persona.Genero;
 import banco.pichincha.web.persona.Persona;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 
-// @Entity
-// @Table
+@Entity
+@Table(name = "cliente")
+@PrimaryKeyJoinColumn(name = "persona_id")
 public class Cliente extends Persona {
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long clienteId;
     private String password;
     private Boolean estado;
 
@@ -29,10 +25,6 @@ public class Cliente extends Persona {
         super(nombre, genero, edad, identificacion, direccion, telefono);
         this.password = password;
         this.estado = estado;
-    }
-
-    public Long getClienteId() {
-        return this.clienteId;
     }
 
     public void setPassword(String psw) {
@@ -54,8 +46,7 @@ public class Cliente extends Persona {
     @Override
     public String toString() {
         return "Cliente{" +
-                "clienteId=" + clienteId +
-                ", estado=" + estado +
+                "estado=" + estado +
                 '}';
     }
 }

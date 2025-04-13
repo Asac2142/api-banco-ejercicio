@@ -1,6 +1,10 @@
 package banco.pichincha.web.persona;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -8,14 +12,15 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 
-// @Entity
-// @Table
-// @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Persona {
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Entity
+@Table(name = "persona")
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Persona implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
+    @Enumerated(EnumType.STRING)
     private Genero genero;
     private Integer edad;
     private String identificacion;
