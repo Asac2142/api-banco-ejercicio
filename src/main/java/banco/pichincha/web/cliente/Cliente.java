@@ -2,55 +2,52 @@ package banco.pichincha.web.cliente;
 
 import banco.pichincha.web.persona.Genero;
 import banco.pichincha.web.persona.Persona;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "cliente")
-@PrimaryKeyJoinColumn(name = "persona_id")
+@PrimaryKeyJoinColumn(name = "id")
 public class Cliente extends Persona {
+
+    @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "estado")
     private Boolean estado;
 
+    public Cliente() {
+    }
+
     public Cliente(
-            String password,
-            Boolean estado,
             String nombre,
             Genero genero,
             Integer edad,
             String identificacion,
             String direccion,
-            String telefono) {
+            String telefono,
+            String password,
+            Boolean estado) {
         super(nombre, genero, edad, identificacion, direccion, telefono);
         this.password = password;
         this.estado = estado;
     }
 
-    public Cliente() {
-    }
-
-    public void setPassword(String psw) {
-        this.password = psw;
-    }
-
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
-    public void setEstado(Boolean est) {
-        this.estado = est;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Boolean getEstado() {
-        return this.estado;
+        return estado;
     }
 
-    @Override
-    public String toString() {
-        return "Cliente{" +
-                "estado=" + estado +
-                '}';
+    public void setEstado(Boolean estado) {
+        this.estado = estado;
     }
 }

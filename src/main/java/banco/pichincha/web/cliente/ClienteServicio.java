@@ -49,7 +49,7 @@ public class ClienteServicio {
     }
 
     public ClienteResponseDTO updateCliente(ClienteRequestDTO request, Long id) {
-        var cliente = this.clienteRep
+        Cliente cliente = this.clienteRep
                 .findById(id.longValue())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Cliente no encontrado con identificacion: " + request.getIdentificacion()));

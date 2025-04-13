@@ -1,26 +1,56 @@
 package banco.pichincha.web.movimiento;
 
+import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class Movimiento {
-    private LocalDate fecha;
-    private Double valor;
-    private Double saldo;
-    private MTipo tipo;
+import banco.pichincha.web.cuenta.Cuenta;
 
-    public Movimiento(LocalDate fecha, Double valor, Double saldo, MTipo tipo) {
+@Entity
+@Table(name = "movimientos")
+public class Movimiento {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "fecha", nullable = false)
+    private LocalDate fecha;
+
+    @Column(name = "tipo_movimiento", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TipoMovimiento tipoMovimiento;
+
+    @Column(name = "valor", nullable = false)
+    private BigDecimal valor;
+
+    @Column(name = "saldo", nullable = false)
+    private BigDecimal saldo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cuenta_id", nullable = false)
+    private Cuenta cuenta;
+
+    public Movimiento() {
+    }
+
+    public Movimiento(LocalDate fecha, TipoMovimiento tipoMovimiento, BigDecimal valor, BigDecimal saldo,
+            Cuenta cuenta) {
         this.fecha = fecha;
+        this.tipoMovimiento = tipoMovimiento;
         this.valor = valor;
         this.saldo = saldo;
-        this.tipo = tipo;
+        this.cuenta = cuenta;
     }
 
-    public void setTipo(MTipo t) {
-        this.tipo = t;
+    // Getters and setters
+    public Long getId() {
+        return id;
     }
 
-    public MTipo getTipo() {
-        return this.tipo;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDate getFecha() {
@@ -31,29 +61,35 @@ public class Movimiento {
         this.fecha = fecha;
     }
 
-    public Double getValor() {
+    public TipoMovimiento getTipoMovimiento() {
+        return tipoMovimiento;
+    }
+
+    public void setTipoMovimiento(TipoMovimiento tipoMovimiento) {
+        this.tipoMovimiento = tipoMovimiento;
+    }
+
+    public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(Double valor) {
+    public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
 
-    public Double getSaldo() {
+    public BigDecimal getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(Double saldo) {
+    public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
     }
 
-    @Override
-    public String toString() {
-        return "Movimiento{" +
-                "fecha=" + fecha +
-                ", valor=" + valor +
-                ", saldo=" + saldo +
-                ", tipo=" + tipo +
-                '}';
+    public Cuenta getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
     }
 }

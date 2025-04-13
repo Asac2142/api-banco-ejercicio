@@ -1,45 +1,87 @@
 package banco.pichincha.web.cuenta;
 
+import java.math.BigDecimal;
+
+import banco.pichincha.web.cliente.Cliente;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "cuenta")
 public class Cuenta {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-    private String cuenta;
-    private Tipo tipo;
-    private Double saldo;
+
+    @Column(name = "numero_cuenta", nullable = false, unique = true, length = 20)
+    private String numeroCuenta;
+
+    @Column(name = "tipo_cuenta", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Tipo tipoCuenta;
+
+    @Column(name = "saldo_inicial", nullable = false)
+    private BigDecimal saldoInicial;
+
+    @Column(name = "estado")
     private Boolean estado;
 
-    public Cuenta(String cuenta, Tipo tipo, Double saldo, Boolean estado) {
-        this.cuenta = cuenta;
-        this.tipo = tipo;
-        this.saldo = saldo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
+
+    public Cuenta() {
+    }
+
+    public Cuenta(String numeroCuenta, Tipo tipoCuenta, BigDecimal saldoInicial, Boolean estado, Cliente cliente) {
+        this.numeroCuenta = numeroCuenta;
+        this.tipoCuenta = tipoCuenta;
+        this.saldoInicial = saldoInicial;
         this.estado = estado;
+        this.cliente = cliente;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getCuenta() {
-        return cuenta;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setCuenta(String cuenta) {
-        this.cuenta = cuenta;
+    public String getNumeroCuenta() {
+        return numeroCuenta;
     }
 
-    public Tipo getTipo() {
-        return tipo;
+    public void setNumeroCuenta(String numeroCuenta) {
+        this.numeroCuenta = numeroCuenta;
     }
 
-    public void setTipo(Tipo tipo) {
-        this.tipo = tipo;
+    public Tipo getTipoCuenta() {
+        return tipoCuenta;
     }
 
-    public Double getSaldo() {
-        return saldo;
+    public void setTipoCuenta(Tipo tipoCuenta) {
+        this.tipoCuenta = tipoCuenta;
     }
 
-    public void setSaldo(Double saldo) {
-        this.saldo = saldo;
+    public BigDecimal getSaldoInicial() {
+        return saldoInicial;
+    }
+
+    public void setSaldoInicial(BigDecimal saldoInicial) {
+        this.saldoInicial = saldoInicial;
     }
 
     public Boolean getEstado() {
@@ -50,14 +92,11 @@ public class Cuenta {
         this.estado = estado;
     }
 
-    @Override
-    public String toString() {
-        return "Cuenta{" +
-                "id=" + id +
-                ", cuenta='" + cuenta + '\'' +
-                ", tipo=" + tipo +
-                ", saldo=" + saldo +
-                ", estado=" + estado +
-                '}';
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }

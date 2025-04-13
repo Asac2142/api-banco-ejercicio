@@ -1,6 +1,5 @@
 package banco.pichincha.web.movimiento;
 
-public enum MTipo {
-    EGRESO,
-    INGRESO
+enum TipoMovimiento {
+    DEPOSITO, RETIRO
 }
