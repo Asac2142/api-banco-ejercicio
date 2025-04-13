@@ -7,6 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import banco.pichincha.web.exception.BusinessException;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ClienteServicio {
@@ -32,6 +34,7 @@ public class ClienteServicio {
         return this.clienteRep.findClienteByIdentificacion(identificacion);
     }
 
+    @Transactional
     public ClienteResponseDTO createCliente(ClienteRequestDTO request) {
         if (this.clienteRep.existsByIdentificacion(request.getIdentificacion())) {
             throw new BusinessException("Identificacion de cliente ya existe: " + request.getIdentificacion());
@@ -41,6 +44,35 @@ public class ClienteServicio {
         cliente.setPassword(this.encoder.encode(request.getPassword()));
         cliente.setEstado(request.getEstado() != null ? request.getEstado() : true);
 
+        cliente = this.clienteRep.save(cliente);
+        return this.mapper.toResponse(cliente);
+    }
+
+    public ClienteResponseDTO updateCliente(ClienteRequestDTO request, Long id) {
+        var cliente = this.clienteRep
+                .findById(id.longValue())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Cliente no encontrado con identificacion: " + request.getIdentificacion()));
+
+        var clienteDiferente = cliente.getIdentificacion().equals(request.getIdentificacion());
+
+        if (!clienteDiferente &&
+                !this.clienteRep.existsByIdentificacion(request.getIdentificacion())) {
+            throw new BusinessException("Cliente posee distinta identificacion");
+        }
+
+        cliente.setNombre(request.getNombre());
+        cliente.setGenero(request.getGenero());
+        cliente.setEdad(request.getEdad());
+        cliente.setIdentificacion(request.getIdentificacion());
+        cliente.setDireccion(request.getDireccion());
+        cliente.setTelefono(request.getTelefono());
+
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            cliente.setPassword(this.encoder.encode(request.getPassword()));
+        }
+
+        cliente.setEstado(request.getEstado() != null ? request.getEstado() : cliente.getEstado());
         cliente = this.clienteRep.save(cliente);
         return this.mapper.toResponse(cliente);
     }

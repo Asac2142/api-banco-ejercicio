@@ -28,6 +28,9 @@ public class Cliente extends Persona {
         this.estado = estado;
     }
 
+    public Cliente() {
+    }
+
     public void setPassword(String psw) {
         this.password = psw;
     }

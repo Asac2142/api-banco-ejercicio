@@ -7,11 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 
 @RestController
 @RequestMapping(path = "api/v1/clientes")
@@ -23,23 +25,34 @@ public class ClienteController {
     }
 
     @GetMapping("")
-    List<Cliente> getClientes() {
-        return this.cs.getClientes();
+    ResponseEntity<List<Cliente>> getClientes() {
+        var res = this.cs.getClientes();
+        return ResponseEntity.status(200).body(res);
     }
 
     @GetMapping("/identificacion/{identificacion}")
-    Optional<Cliente> getClienteByIdentificacion(@PathVariable String identificacion) {
-        return this.cs.getClienteByIdentificacion(identificacion);
+    ResponseEntity<Optional<Cliente>> getClienteByIdentificacion(@PathVariable String identificacion) {
+        var res = this.cs.getClienteByIdentificacion(identificacion);
+        return ResponseEntity.status(200).body(res);
     }
 
     @GetMapping("/nombre/{nombre}")
-    List<Cliente> getClienteByNombre(@PathVariable String nombre) {
-        return this.cs.getClienteByNombre(nombre);
+    ResponseEntity<List<Cliente>> getClienteByNombre(@PathVariable String nombre) {
+        var res = this.cs.getClienteByNombre(nombre);
+        return ResponseEntity.status(200).body(res);
     }
 
     @PostMapping("")
     ResponseEntity<ClienteResponseDTO> createCliente(@Valid @RequestBody ClienteRequestDTO request) {
-        var response = this.cs.createCliente(request);
-        return ResponseEntity.status(201).body(response);
+        var res = this.cs.createCliente(request);
+        return ResponseEntity.status(201).body(res);
+    }
+
+    @PutMapping("/{id}")
+    ResponseEntity<ClienteResponseDTO> updateCliente(
+            @Valid @RequestBody ClienteRequestDTO request,
+            @PathVariable @Positive(message = "Id tiene que ser mayor que cero") Long id) {
+        var res = this.cs.updateCliente(request, id);
+        return ResponseEntity.status(200).body(res);
     }
 }

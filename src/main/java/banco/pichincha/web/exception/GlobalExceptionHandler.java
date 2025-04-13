@@ -9,6 +9,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
+
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolation;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -42,6 +46,32 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<ErrorResponse> handleHandlerMethodValidationException(HandlerMethodValidationException ex) {
+        logger.warn("BAD REQUEST: Validation failure - {}", ex.getMessage());
+
+        var response = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Validacion Fallida",
+                "Data de entrada invalido");
+
+        ex.getParameterValidationResults().forEach(result -> {
+            if (result.getResolvableErrors() != null) {
+                result.getResolvableErrors().forEach(error -> {
+                    if (error instanceof ConstraintViolation<?> violation) {
+                        String field = violation.getPropertyPath().toString();
+                        String message = violation.getMessage();
+                        response.getDetails().put(field, message);
+                    } else {
+                        response.getDetails().put("unknown", error.getDefaultMessage());
+                    }
+                });
+            }
+        });
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
         logger.info("NOT FOUND", ex.getMessage());
@@ -61,6 +91,19 @@ public class GlobalExceptionHandler {
                 "Internal Server Error",
                 "An unexpected error occurred");
 
+        ex.printStackTrace();
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException ex) {
+        logger.info("Resource not found: {}", ex.getMessage());
+
+        ErrorResponse response = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                "Recurso no encontrado",
+                ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }
