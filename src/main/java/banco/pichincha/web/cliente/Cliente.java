@@ -2,6 +2,7 @@ package banco.pichincha.web.cliente;
 
 import banco.pichincha.web.persona.Genero;
 import banco.pichincha.web.persona.Persona;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
