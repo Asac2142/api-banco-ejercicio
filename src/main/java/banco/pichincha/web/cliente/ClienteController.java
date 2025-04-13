@@ -39,8 +39,7 @@ public class ClienteController {
 
     @PostMapping("")
     ResponseEntity<ClienteResponseDTO> createCliente(@Valid @RequestBody ClienteRequestDTO request) {
-        // var response = this.cs.createCliente(request);
-        return ResponseEntity.status(201).body(null); // TODO send response
+        var response = this.cs.createCliente(request);
+        return ResponseEntity.status(201).body(response);
     }
-
 }

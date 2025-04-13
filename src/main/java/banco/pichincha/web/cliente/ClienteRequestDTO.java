@@ -16,13 +16,14 @@ public class ClienteRequestDTO {
     private Integer edad;
 
     @NotBlank(message = "Identificacion es mandatorio")
-    @Size(max = 10, min = 13, message = "Identificacion debe ser al menos 10 caracteres y maximo 13 caracteres")
+    @Size(max = 13, min = 10, message = "Identificacion debe ser al menos 10 caracteres y maximo 13 caracteres")
     private String identificacion;
     private String direccion;
+    @Size(max = 10, min = 7, message = "Telefono deber tener al menos 7 digitos hasta 10 como maximo")
     private String telefono;
 
     @NotBlank(message = "Password es mandatorio")
-    @Size(min = 6, message = "Password tiene que ser al menos 6 caracteres")
+    @Size(min = 8, message = "Password tiene que ser al menos 8 caracteres")
     private String password;
     private Boolean estado;
 
