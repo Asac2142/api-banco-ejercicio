@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,5 +55,11 @@ public class ClienteController {
             @PathVariable @Positive(message = "Id tiene que ser mayor que cero") Long id) {
         var res = this.cs.updateCliente(request, id);
         return ResponseEntity.status(200).body(res);
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<Long> deleteCliente(@PathVariable @Positive(message = "Id tiene que ser mayor que cero") Long id) {
+        this.cs.deleteCliente(id);
+        return ResponseEntity.status(200).body(id);
     }
 }
