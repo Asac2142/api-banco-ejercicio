@@ -1,7 +1,7 @@
 
 package banco.pichincha.web.cliente;
 
-import banco.pichincha.web.cuenta.Tipo;
+import banco.pichincha.web.cuenta.CuentaTipo;
 import banco.pichincha.web.persona.Genero;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,16 +32,16 @@ public class ClienteRequestDTO {
     private Boolean estado;
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Tipo tipoCuenta;
+    private CuentaTipo tipoCuenta;
     @NotNull
     @Positive(message = "Saldo debe ser mayor a cero")
     private Double saldo;
 
-    public Tipo getTipoCuenta() {
+    public CuentaTipo getTipoCuenta() {
         return this.tipoCuenta;
     }
 
-    public void setTipoCuenta(Tipo tipo) {
+    public void setTipoCuenta(CuentaTipo tipo) {
         this.tipoCuenta = tipo;
     }
 

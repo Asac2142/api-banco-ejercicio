@@ -29,7 +29,7 @@ public class Cuenta {
 
     @Column(name = "tipo_cuenta", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Tipo tipoCuenta;
+    private CuentaTipo tipoCuenta;
 
     @Column(name = "saldo_inicial", nullable = false)
     private BigDecimal saldoInicial;
@@ -44,7 +44,8 @@ public class Cuenta {
     public Cuenta() {
     }
 
-    public Cuenta(String numeroCuenta, Tipo tipoCuenta, BigDecimal saldoInicial, Boolean estado, Cliente cliente) {
+    public Cuenta(String numeroCuenta, CuentaTipo tipoCuenta, BigDecimal saldoInicial, Boolean estado,
+            Cliente cliente) {
         this.numeroCuenta = numeroCuenta;
         this.tipoCuenta = tipoCuenta;
         this.saldoInicial = saldoInicial;
@@ -68,11 +69,11 @@ public class Cuenta {
         this.numeroCuenta = numeroCuenta;
     }
 
-    public Tipo getTipoCuenta() {
+    public CuentaTipo getTipoCuenta() {
         return tipoCuenta;
     }
 
-    public void setTipoCuenta(Tipo tipoCuenta) {
+    public void setTipoCuenta(CuentaTipo tipoCuenta) {
         this.tipoCuenta = tipoCuenta;
     }
 

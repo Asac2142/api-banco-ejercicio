@@ -7,16 +7,16 @@ import jakarta.validation.constraints.Positive;
 
 public class CuentaRequestDTO {
     @NotNull
-    private Tipo tipo;
+    private CuentaTipo tipo;
     @NotNull
     @Positive
     private BigDecimal saldo;
 
-    public void setTipo(Tipo t) {
+    public void setTipo(CuentaTipo t) {
         this.tipo = t;
     }
 
-    public Tipo getTipo() {
+    public CuentaTipo getTipo() {
         return this.tipo;
     }
 

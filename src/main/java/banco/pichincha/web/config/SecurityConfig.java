@@ -21,6 +21,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/clientes/**").permitAll()
                         .requestMatchers("/api/v1/cuentas/**").permitAll()
+                        .requestMatchers("/api/v1/movimientos/**").permitAll()
                         .anyRequest().authenticated() // Require auth for all other endpoints
                 )
                 .csrf(csrf -> csrf.disable()); // Disable CSRF for simplicity (POST requests)

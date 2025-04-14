@@ -1,6 +1,6 @@
 package banco.pichincha.web.cuenta;
 
-public enum Tipo {
+public enum CuentaTipo {
     AHORROS,
     CORRIENTE
 }

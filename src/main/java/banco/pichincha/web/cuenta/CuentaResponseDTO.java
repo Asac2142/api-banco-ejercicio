@@ -2,10 +2,11 @@ package banco.pichincha.web.cuenta;
 
 public class CuentaResponseDTO {
     private String numeroCuenta;
-    private Tipo tipo;
+    private CuentaTipo tipo;
     private Double saldo;
     private Boolean estado;
     private String clienteNombre;
+    private Long cuentaId;
 
     public String getNumeroCuenta() {
         return numeroCuenta;
@@ -15,11 +16,11 @@ public class CuentaResponseDTO {
         this.numeroCuenta = numeroCuenta;
     }
 
-    public Tipo getTipo() {
+    public CuentaTipo getTipo() {
         return tipo;
     }
 
-    public void setTipo(Tipo tipo) {
+    public void setTipo(CuentaTipo tipo) {
         this.tipo = tipo;
     }
 
@@ -45,5 +46,13 @@ public class CuentaResponseDTO {
 
     public void setClienteNombre(String clienteNombre) {
         this.clienteNombre = clienteNombre;
+    }
+
+    public void setCuentaId(Long ctaId) {
+        this.cuentaId = ctaId;
+    }
+
+    public Long getCuentaId() {
+        return this.cuentaId;
     }
 }
