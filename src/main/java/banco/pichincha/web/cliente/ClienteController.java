@@ -1,7 +1,6 @@
 package banco.pichincha.web.cliente;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,19 +25,23 @@ public class ClienteController {
     }
 
     @GetMapping("")
-    ResponseEntity<List<Cliente>> getClientes() {
+    ResponseEntity<List<ClienteResponseDTO>> getClientes() {
         var res = this.cs.getClientes();
         return ResponseEntity.status(200).body(res);
     }
 
     @GetMapping("/identificacion/{identificacion}")
-    ResponseEntity<Optional<Cliente>> getClienteByIdentificacion(@PathVariable String identificacion) {
+    ResponseEntity<ClienteResponseDTO> getClienteByIdentificacion(@PathVariable String identificacion) {
         var res = this.cs.getClienteByIdentificacion(identificacion);
-        return ResponseEntity.status(200).body(res);
+        if (res != null) {
+            return ResponseEntity.status(200).body(res);
+        }
+
+        return ResponseEntity.status(404).body(null);
     }
 
     @GetMapping("/nombre/{nombre}")
-    ResponseEntity<List<Cliente>> getClienteByNombre(@PathVariable String nombre) {
+    ResponseEntity<List<ClienteResponseDTO>> getClienteByNombre(@PathVariable String nombre) {
         var res = this.cs.getClienteByNombre(nombre);
         return ResponseEntity.status(200).body(res);
     }

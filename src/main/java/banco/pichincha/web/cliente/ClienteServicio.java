@@ -1,8 +1,9 @@
 package banco.pichincha.web.cliente;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,9 +11,9 @@ import org.springframework.stereotype.Service;
 import banco.pichincha.web.cuenta.Cuenta;
 import banco.pichincha.web.cuenta.CuentaRepository;
 import banco.pichincha.web.exception.BusinessException;
+import banco.pichincha.web.utils.GenerateCuenta;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import java.security.SecureRandom;
 
 @Service
 public class ClienteServicio {
@@ -20,7 +21,6 @@ public class ClienteServicio {
     private final ClienteMapper mapper;
     private final PasswordEncoder encoder;
     private final CuentaRepository cuentaRep;
-    private static final SecureRandom random = new SecureRandom();
 
     public ClienteServicio(
             ClienteRepository clienteRep,
@@ -33,16 +33,41 @@ public class ClienteServicio {
         this.cuentaRep = cr;
     }
 
-    public List<Cliente> getClientes() {
-        return this.clienteRep.findAll();
+    public List<ClienteResponseDTO> getClientes() {
+        var clientes = this.clienteRep.findAll();
+        List<ClienteResponseDTO> res = Collections.emptyList();
+
+        if (!clientes.isEmpty()) {
+            return clienteRep.findAll()
+                    .stream()
+                    .map(mapper::toResponse)
+                    .collect(Collectors.toList());
+        }
+
+        return res;
     }
 
-    public List<Cliente> getClienteByNombre(String name) {
-        return this.clienteRep.findClienteByNombre(name);
+    public List<ClienteResponseDTO> getClienteByNombre(String name) {
+        var clientes = this.clienteRep.findClienteByNombre(name);
+        List<ClienteResponseDTO> res = Collections.emptyList();
+
+        if (!clientes.isEmpty()) {
+            clientes.forEach((cliente) -> {
+                var mapped = this.mapper.toResponse(cliente);
+                res.add(mapped);
+            });
+        }
+
+        return res;
     }
 
-    public Optional<Cliente> getClienteByIdentificacion(String identificacion) {
-        return this.clienteRep.findClienteByIdentificacion(identificacion);
+    public ClienteResponseDTO getClienteByIdentificacion(String identificacion) {
+        var cliente = this.clienteRep.findClienteByIdentificacion(identificacion);
+        if (cliente.isPresent()) {
+            return this.mapper.toResponse(cliente.get());
+        }
+
+        return null;
     }
 
     @Transactional
@@ -111,22 +136,12 @@ public class ClienteServicio {
     }
 
     private String generateUniqueNumeroCuenta() {
-        String numeroCuenta = generateRandomNumeroCuenta();
+        String numeroCuenta = GenerateCuenta.generarCuenta();
 
         if (!this.cuentaRep.existsByNumeroCuenta(numeroCuenta)) {
             return numeroCuenta;
         }
 
         throw new BusinessException("No se pudo generar un número de cuenta único");
-    }
-
-    private String generateRandomNumeroCuenta() {
-        StringBuilder sb = new StringBuilder(10);
-
-        for (int i = 0; i < 10; i++) {
-            sb.append(random.nextInt(10));
-        }
-
-        return sb.toString();
     }
 }

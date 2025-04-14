@@ -19,7 +19,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/clientes/**").permitAll() // Allow public access to /api/clientes
+                        .requestMatchers("/api/v1/clientes/**").permitAll()
+                        .requestMatchers("/api/v1/cuentas/**").permitAll()
                         .anyRequest().authenticated() // Require auth for all other endpoints
                 )
                 .csrf(csrf -> csrf.disable()); // Disable CSRF for simplicity (POST requests)
