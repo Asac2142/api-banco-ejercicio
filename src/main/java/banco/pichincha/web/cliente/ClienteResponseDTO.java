@@ -11,6 +11,15 @@ public class ClienteResponseDTO {
     private String direccion;
     private String telefono;
     private Boolean estado;
+    private String password;
+
+    public void setPassword(String p) {
+        this.password = p;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
 
     public Long getId() {
         return id;

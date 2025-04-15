@@ -5,11 +5,13 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
-    List<Cliente> findClienteByNombre(String name);
+    @Query("SELECT c FROM Cliente c INNER JOIN Persona p ON p.id = c.id WHERE LOWER(p.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))")
+    List<Cliente> findClienteByNombre(@Param("nombre") String nombre);
 
     Optional<Cliente> findClienteByIdentificacion(String identificacion);
 

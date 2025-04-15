@@ -1,6 +1,6 @@
 package banco.pichincha.web.cliente;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,10 +8,8 @@ import java.util.stream.Collectors;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import banco.pichincha.web.cuenta.Cuenta;
 import banco.pichincha.web.cuenta.CuentaRepository;
 import banco.pichincha.web.exception.BusinessException;
-import banco.pichincha.web.utils.GenerateCuenta;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
@@ -47,9 +45,9 @@ public class ClienteServicio {
         return res;
     }
 
-    public List<ClienteResponseDTO> getClienteByNombre(String name) {
-        var clientes = this.clienteRep.findClienteByNombre(name);
-        List<ClienteResponseDTO> res = Collections.emptyList();
+    public List<ClienteResponseDTO> getClienteByNombre(String nombre) {
+        var clientes = this.clienteRep.findClienteByNombre(nombre);
+        List<ClienteResponseDTO> res = new ArrayList<>();
 
         if (!clientes.isEmpty()) {
             clientes.forEach((cliente) -> {
@@ -81,14 +79,13 @@ public class ClienteServicio {
         cliente.setEstado(request.getEstado() != null ? request.getEstado() : true);
 
         cliente = this.clienteRep.save(cliente);
-        saveCuenta(request, cliente);
         return this.mapper.toResponse(cliente);
     }
 
     @Transactional
     public ClienteResponseDTO updateCliente(ClienteRequestDTO request, Long id) {
         Cliente cliente = this.clienteRep
-                .findById(id.longValue())
+                .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Cliente no encontrado con identificacion: " + request.getIdentificacion()));
         var clienteDiferente = cliente.getIdentificacion().equals(request.getIdentificacion());
@@ -122,26 +119,5 @@ public class ClienteServicio {
 
         cuentaRep.deleteByClienteId(id);
         clienteRep.deleteById(id);
-    }
-
-    private Cuenta saveCuenta(ClienteRequestDTO request, Cliente cliente) {
-        var cuenta = new Cuenta();
-        cuenta.setNumeroCuenta(generateUniqueNumeroCuenta());
-        cuenta.setTipoCuenta(request.getTipoCuenta());
-        cuenta.setSaldoInicial(BigDecimal.valueOf(request.getSaldo()));
-        cuenta.setEstado(true);
-        cuenta.setCliente(cliente);
-
-        return this.cuentaRep.save(cuenta);
-    }
-
-    private String generateUniqueNumeroCuenta() {
-        String numeroCuenta = GenerateCuenta.generarCuenta();
-
-        if (!this.cuentaRep.existsByNumeroCuenta(numeroCuenta)) {
-            return numeroCuenta;
-        }
-
-        throw new BusinessException("No se pudo generar un número de cuenta único");
     }
 }

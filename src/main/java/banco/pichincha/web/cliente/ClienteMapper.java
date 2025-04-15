@@ -5,7 +5,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ClienteMapper {
-    @Mapping(target = "password", ignore = true)
     @Mapping(target = "estado", ignore = true)
     @Mapping(target = "id", ignore = true)
     Cliente toEntity(ClienteRequestDTO request);
