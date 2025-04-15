@@ -29,7 +29,7 @@ public class CuentaController {
     }
 
     @GetMapping("/{ctaNro}")
-    ResponseEntity<CuentaResponseDTO> getCuentaByCtaNro(@PathVariable String ctaNro) {
+    ResponseEntity<List<CuentaResponseDTO>> getCuentaByCtaNro(@PathVariable String ctaNro) {
         var res = this.ctaServicio.getCuentaByNumeroCta(ctaNro);
         return ResponseEntity.status(200).body(res);
     }

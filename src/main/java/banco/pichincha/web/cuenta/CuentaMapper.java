@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 public interface CuentaMapper {
     @Mapping(source = "tipoCuenta", target = "tipo")
     @Mapping(source = "cliente.nombre", target = "clienteNombre")
+    @Mapping(source = "cliente.id", target = "clienteId")
     @Mapping(source = "saldoInicial", target = "saldo")
     @Mapping(source = "id", target = "cuentaId")
     CuentaResponseDTO toResponse(Cuenta cuenta);

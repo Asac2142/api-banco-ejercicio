@@ -6,7 +6,16 @@ public class CuentaResponseDTO {
     private Double saldo;
     private Boolean estado;
     private String clienteNombre;
+    private Long clienteId;
     private Long cuentaId;
+
+    public void setClienteId(Long id) {
+        this.clienteId = id;
+    }
+
+    public Long getClienteId() {
+        return this.clienteId;
+    }
 
     public String getNumeroCuenta() {
         return numeroCuenta;

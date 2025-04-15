@@ -1,5 +1,6 @@
 package banco.pichincha.web.cuenta;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,14 +24,18 @@ public class CuentaServicio {
         this.ctaMapper = cm;
     }
 
-    CuentaResponseDTO getCuentaByNumeroCta(String nroCta) {
-        var cta = this.ctaRepo.findByNumeroCuenta(nroCta);
+    List<CuentaResponseDTO> getCuentaByNumeroCta(String nroCta) {
+        var ctas = this.ctaRepo.findByNumeroCuenta(nroCta);
+        List<CuentaResponseDTO> res = new ArrayList<>();
 
-        if (cta.isPresent()) {
-            return this.ctaMapper.toResponse(cta.get());
+        if (!ctas.isEmpty()) {
+            ctas.forEach((cuenta) -> {
+                var mapped = this.ctaMapper.toResponse(cuenta);
+                res.add(mapped);
+            });
         }
 
-        return null;
+        return res;
     }
 
     List<CuentaResponseDTO> getCuentas() {
