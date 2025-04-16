@@ -1,36 +1,37 @@
+version: '3'
 services:
-  postgres:
-    image: postgres:latest
-    environment:
-      POSTGRES_DB: banco
-      POSTGRES_USER: andres
-      POSTGRES_PASSWORD: password
-    volumes:
-      - ./src/main/resources/BaseDatos.sql:/docker-entrypoint-initdb.d/BaseDatos.sql
-    ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U andres -d banco"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+ postgres:
+  image: postgres:latest
+  environment:
+    POSTGRES_DB: banco
+    POSTGRES_USER: andres
+    POSTGRES_PASSWORD: password
+  volumes:
+    - ./src/main/resources/BaseDatos.sql:/docker-entrypoint-initdb.d/BaseDatos.sql
+  ports:
+    - "5432:5432"
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready -U andres -d banco"]
+    interval: 10s
+    timeout: 5s
+    retries: 5
 
-  # web:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #   environment:
-  #     - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/banco
-  #     - SPRING_DATASOURCE_USERNAME=andres
-  #     - SPRING_DATASOURCE_PASSWORD=password
-  #     - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 3
+ web:
+  build:
+    context: .
+    dockerfile: Dockerfile
+  ports:
+    - "8080:8080"
+  depends_on:
+    postgres:
+      condition: service_healthy
+  environment:
+    - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/banco
+    - SPRING_DATASOURCE_USERNAME=andres
+    - SPRING_DATASOURCE_PASSWORD=password
+    - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+  healthcheck:
+    test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+    interval: 30s
+    timeout: 10s
+    retries: 3
