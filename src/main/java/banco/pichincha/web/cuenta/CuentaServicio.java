@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import banco.pichincha.web.cliente.ClienteRepository;
 import banco.pichincha.web.exception.BusinessException;
+import banco.pichincha.web.movimiento.MovimientoRepositorio;
 import banco.pichincha.web.utils.GenerateCuenta;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -17,11 +18,13 @@ public class CuentaServicio {
     private final CuentaRepository ctaRepo;
     private final CuentaMapper ctaMapper;
     private final ClienteRepository cltRepo;
+    private final MovimientoRepositorio movRepo;
 
-    public CuentaServicio(CuentaRepository cr, ClienteRepository clr, CuentaMapper cm) {
+    public CuentaServicio(CuentaRepository cr, ClienteRepository clr, CuentaMapper cm, MovimientoRepositorio mr) {
         this.ctaRepo = cr;
         this.cltRepo = clr;
         this.ctaMapper = cm;
+        this.movRepo = mr;
     }
 
     List<CuentaResponseDTO> getCuentaByNumeroCta(String nroCta) {
@@ -83,6 +86,7 @@ public class CuentaServicio {
             throw new EntityNotFoundException("Cuenta no encontrada con Id: " + cuentaId);
         }
 
+        this.movRepo.deleteAllByCuentaId(cuentaId);
         this.ctaRepo.deleteById(cuentaId);
     }
 }

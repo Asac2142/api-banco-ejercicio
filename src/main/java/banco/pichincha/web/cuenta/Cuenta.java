@@ -44,7 +44,11 @@ public class Cuenta {
     public Cuenta() {
     }
 
-    public Cuenta(String numeroCuenta, CuentaTipo tipoCuenta, BigDecimal saldoInicial, Boolean estado,
+    public Cuenta(
+            String numeroCuenta,
+            CuentaTipo tipoCuenta,
+            BigDecimal saldoInicial,
+            Boolean estado,
             Cliente cliente) {
         this.numeroCuenta = numeroCuenta;
         this.tipoCuenta = tipoCuenta;

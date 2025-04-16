@@ -2,6 +2,7 @@ package banco.pichincha.web.movimiento;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ public class MovimientoService {
         this.movMapper = m;
     }
 
-    List<MovimientoResponseDTO> getMovimientosByCliente(LocalDate desde, LocalDate hasta, Long clienteId) {
+    List<MovimientoResponseDTO> getMovimientoByFechas(LocalDate desde, LocalDate hasta, Long clienteId) {
         if (hasta.isBefore(desde)) {
             throw new BusinessException("Fecha hasta debe ser mayor o igual que fecha desde");
         }
@@ -45,6 +46,34 @@ public class MovimientoService {
                 .map(movMapper::toResponse)
                 .collect(Collectors.toList());
 
+    }
+
+    List<MovimientoResponseDTO> getMovimientos() {
+        List<MovimientoResponseDTO> res = new ArrayList<>();
+        var movs = this.movRepo.findAll();
+
+        if (!movs.isEmpty()) {
+            movs.forEach((movimiento) -> {
+                var mapped = this.movMapper.toResponse(movimiento);
+                res.add(mapped);
+            });
+        }
+
+        return res;
+    }
+
+    List<MovimientoResponseDTO> getMovimientosByNumero(Long cuentaId) {
+        List<MovimientoResponseDTO> res = new ArrayList<>();
+        var movs = this.movRepo.findAllByCuentaId(cuentaId);
+
+        if (!movs.isEmpty()) {
+            movs.forEach((movimiento) -> {
+                var mapped = this.movMapper.toResponse(movimiento);
+                res.add(mapped);
+            });
+        }
+
+        return res;
     }
 
     @Transactional

@@ -11,5 +11,7 @@ public interface MovimientoMapper {
     @Mapping(target = "monto", source = "valor")
     @Mapping(target = "saldoDisponible", source = "saldo")
     @Mapping(target = "estado", source = "cuenta.estado")
+    @Mapping(target = "cuentaId", source = "cuenta.id")
+    @Mapping(target = "cuentaTipo", source = "cuenta.tipoCuenta")
     MovimientoResponseDTO toResponse(Movimiento movimiento);
 }

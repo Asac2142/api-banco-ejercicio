@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @RestController
 @RequestMapping(path = "api/v1/movimientos")
@@ -26,13 +27,26 @@ public class MovimientoController {
         this.movService = ms;
     }
 
+    @GetMapping("")
+    ResponseEntity<List<MovimientoResponseDTO>> getMovimientos() {
+        var res = this.movService.getMovimientos();
+        return ResponseEntity.status(200).body(res);
+    }
+
     @GetMapping("/cliente/{clienteId}/movimientos")
     ResponseEntity<List<MovimientoResponseDTO>> getMovimientosByCliente(
             @PathVariable Long clienteId,
             @RequestParam @NotNull(message = "Fecha desde es obligatoria") LocalDate desde,
             @RequestParam @NotNull(message = "Fecha hasta es obligatoria") LocalDate hasta) {
-        var movimientos = movService.getMovimientosByCliente(desde, hasta, clienteId);
+        var movimientos = movService.getMovimientoByFechas(desde, hasta, clienteId);
         return ResponseEntity.ok(movimientos);
+    }
+
+    @GetMapping("/{cuentaId}")
+    ResponseEntity<List<MovimientoResponseDTO>> getMovimientosByCuentaId(
+            @PathVariable @Positive(message = "cuenta id tiene que ser mayor a cero") Long cuentaId) {
+        var res = this.movService.getMovimientosByNumero(cuentaId);
+        return ResponseEntity.status(200).body(res);
     }
 
     @PostMapping("")
