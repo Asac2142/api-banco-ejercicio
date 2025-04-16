@@ -20,7 +20,7 @@ services:
   build:
     context: .
     dockerfile: Dockerfile
-  # image: andres2142/banco-api:latest
+  image: andres2142/banco-api:latest
   ports:
     - "8080:8080"
   depends_on:
